@@ -1,12 +1,221 @@
-doctype html
-html(lang= theme["han_type"]).han-init
-  head
-    include _head.pug
-    include _mixins.pug
-  body
-    header
-      include _header.pug
-      div.space
-    main
-      include _content.pug
-    include _scripts.pug
+<html>
+
+<head>
+    <meta charset="utf-8">
+    
+    <title>MYSQL服务器管理 | 汾西公子</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon/favicon.ico">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+<link rel="stylesheet" href="/css/tagplugins.css">
+
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+    
+
+
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/atom.xml" title="汾西公子" type="application/atom+xml" />
+    
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div class="blog-header">
+   <a id="menu-nav-icon"><img src="/image/menu.png"/></a>
+   <div class="nav-container">
+     <nav id="main-nav">
+       
+         <a class="main-nav-link" href="/">Home</a>
+       
+         <a class="main-nav-link" href="/archives">Archives</a>
+       
+     </nav>
+   </div>
+   <!--
+   <div id="search-form-wrap">
+     <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+   </div>
+ -->
+    <h1 class="blog-title">汾西公子</h1>
+    <p class="lead blog-description"></p>
+</div>
+
+  <div id='main-part'>
+      <div class="main">
+<div class="blog-post">
+    <!-- Title -->
+    <h1 class="blog-post-title">
+        <a href="/2020/08/04/MYSQL服务器管理/">
+            MYSQL服务器管理
+        </a>
+    </h1>
+    <!-- Date and Author -->
+    <p class="blog-post-meta">
+        2020-08-04
+        
+    </p>
+
+    
+
+    <!-- Content -->
+    <h1 id="mysql教程"><a href="#mysql教程" class="headerlink" title="mysql教程"></a>mysql教程</h1><p><strong>注意</strong>：以下操作以mysql-5.7.29演示</p>
+<p><strong>查看版本</strong></p>
+<blockquote>
+<p>mysql&gt; select version();<br>+———–+<br>| version() |<br>+———–+<br>| 5.7.29    |<br>+———–+<br>1 row in set (0.00 sec)</p>
+</blockquote>
+<h1 id="启动及关闭-MySQL-服务器"><a href="#启动及关闭-MySQL-服务器" class="headerlink" title="启动及关闭 MySQL 服务器"></a>启动及关闭 MySQL 服务器</h1><p><strong>windows下mysql压缩版</strong><br><strong>关闭msyql</strong></p>
+<blockquote>
+<p>net stop mysql<br>或者<br>sc stop mysql</p>
+</blockquote>
+<p><strong>启动mysql</strong></p>
+<blockquote>
+<p>net start mysql<br>或者<br>sc start mysql</p>
+</blockquote>
+<p><font color=orange face="黑体" size=4>注意：</font><br>mysql5.7.29数据库下已经没有password这个字段了，password字段改成了<br>authentication_string</p>
+<h1 id="第5章MySQL服务器管理"><a href="#第5章MySQL服务器管理" class="headerlink" title="第5章MySQL服务器管理"></a>第5章MySQL服务器管理</h1><ol>
+<li>mysqld是MySQL服务器。以下讨论涵盖了这些MySQL服务器配置主题：</li>
+<li>服务器支持的启动选项。您可以在命令行上，通过配置文件或同时在这两者上指定这些选项。</li>
+<li>服务器系统变量。这些变量反映了启动选项的当前状态和值，其中一些可以在服务器运行时进行修改。</li>
+<li>服务器状态变量。这些变量包含有关运行时操作的计数器和统计信息。</li>
+<li>如何设置服务器SQL模式。此设置修改了SQL语法和语义的某些方面，例如为了与其他数据库系统的代码兼容，或控制特定情况下的错误处理。</li>
+<li>服务器如何管理客户端连接。</li>
+<li>配置和使用IPv6支持。</li>
+<li>配置和使用时区支持。</li>
+<li>服务器端帮助功能。</li>
+<li>服务器关闭过程。根据表的类型（事务性或非事务性）以及是否使用复制，需要考虑性能和可靠性。</li>
+<li>有关已在MySQL 5.7中添加，弃用或删除的MySQL服务器变量和选项的列表，请参见第1.5节“在MySQL 5.7中已添加，弃用或删除的 服务器和状态变量及选项”。</li>
+</ol>
+<h2 id="5-1-MySQL服务器"><a href="#5-1-MySQL服务器" class="headerlink" title="5.1 MySQL服务器"></a>5.1 MySQL服务器</h2><p>5.1.1配置服务器<br>i.MySQL服务器mysqld具有许多命令选项和系统变量，可以在启动时进行设置以配置其操作。要确定服务器使用的默认命令选项和系统变量值，请执行以下命令：</p>
+<blockquote>
+<p>shell&gt; mysqld –verbose –help</p>
+</blockquote>
+<p>ii.要在服务器运行时查看服务器实际使用的当前系统变量值，请连接至该服务器并执行以下语句：</p>
+<blockquote>
+<p>mysql&gt; SHOW VARIABLES;</p>
+</blockquote>
+<p>iii.要查看正在运行的服务器的一些统计信息和状态指示器，请执行以下语句：</p>
+<blockquote>
+<p>mysql&gt; SHOW STATUS;</p>
+</blockquote>
+<p>iiii.也可以使用mysqladmin命令获得系统变量和状态信息 ：</p>
+<blockquote>
+<p>shell&gt; mysqladmin variables -uroot -p        #回车，输入密码<br>shell&gt; mysqladmin extended-status -uroot -p    #回车，输入密码</p>
+</blockquote>
+<p>iiiii.MySQL使用可扩展性很强的算法，因此您通常只需很少的内存即可运行。但是，通常可以通过为MySQL提供更多内存来获得更好的性能。</p>
+<p>iiiiii.调整MySQL服务器时，要配置的两个最重要的变量是key_buffer_size和 table_open_cache。在尝试更改任何其他变量之前，您首先应该确信自己已经适当设置了这些设置</p>
+<p>以下示例说明了用于不同运行时配置的一些典型变量值。<br>☜ 如果您至少有1-2GB的内存和许多表，并且希望在中等数量的客户端上获得最佳性能，请使用以下方法：</p>
+<blockquote>
+<p>shell&gt; mysqld_safe –key_buffer_size=384M –table_open_cache=4000 <br>           –sort_buffer_size=4M –read_buffer_size=1M &amp;</p>
+</blockquote>
+<p>☜ 如果您只有256MB的内存并且只有几个表，但是您仍然要进行很多排序，则可以使用以下方法：</p>
+<blockquote>
+<p>shell&gt; mysqld_safe –key_buffer_size=64M –sort_buffer_size=1M</p>
+</blockquote>
+<p>☜ 如果同时连接数量很多，除非将mysqld配置为对每个连接使用很少的内存，否则可能会发生交换问题。 如果您有足够的内存用于所有连接，则mysqld的性能会更好</p>
+<p>☜ 几乎没有内存，却有大量连接，请使用以下命令：</p>
+<blockquote>
+<p>shell&gt; mysqld_safe –key_buffer_size=512K –sort_buffer_size=100K <br>           –read_buffer_size=100K &amp;</p>
+</blockquote>
+<p>甚至这个：</p>
+<blockquote>
+<p>shell&gt; mysqld_safe –key_buffer_size=512K –sort_buffer_size=16K <br>           –table_open_cache=32 –read_buffer_size=8K <br>           –net_buffer_length=1K &amp;</p>
+</blockquote>
+<p>☜ 如果您正在执行GROUP BY或 ORDER BY上比你的可用内存大很多的表操作，增加的价值 read_rnd_buffer_size，加快以下排序操作行的读取。</p>
+<p>☜ 如果在命令行上为mysqld或mysqld_safe指定一个选项，则该选项 仅对服务器的调用有效。要在服务器每次运行时使用该选件，请将其放在选件文件中。请参见第4.2.2.2节“使用选项文件”。</p>
+<p>下一次继续演示的地址：<a href="https://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html</a></p>
+<p><font color=orange face="黑体" size=4>参考：</font><br><a href="https://dev.mysql.com/doc/refman/5.7/en/server-administration.html" target="_blank" rel="noopener">mysql官网文档</a></p>
+
+
+    <!-- Social share choices -->
+    
+  <div id="social-share">
+    <a data-url="http://yoursite.com/2020/08/04/MYSQL%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/" href="https://plus.google.com/share?url=" target="_blank" rel="noopener" class="googleplus"><img src="/image/googleplusicon.png" alt=""/></a>
+    <a data-url="http://yoursite.com/2020/08/04/MYSQL%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/" href="https://twitter.com/intent/tweet?url=" target="_blank" rel="noopener" class="twitter"><img src="/image/twittericon.png" alt=""/></a>
+    <a data-url="http://yoursite.com/2020/08/04/MYSQL%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/" href="http://pinterest.com/pin/create/button/?url=" target="_blank" rel="noopener" class="pinterest"><img src="/image/pinteresticon.png" alt=""/></a>
+    <a data-url="http://yoursite.com/2020/08/04/MYSQL%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/" href="https://www.facebook.com/sharer/sharer.php?u=" target="_blank" rel="noopener" class="facebook"><img src="/image/facebookicon.png" alt=""/></a>
+  </div>
+
+
+
+
+
+<!--
+
+
+https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/08/04/MYSQL%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/
+http://yoursite.com/2020/08/04/MYSQL%25E6%259C%258D%25E5%258A%25A1%25E5%2599%25A8%25E7%25AE%25A1%25E7%2590%2586/
+-->
+
+
+
+    <hr />
+
+
+    <!-- Tags and Categories links -->
+    
+
+    
+
+
+    <!-- Comment using disqus -->
+    
+
+</div>
+</div>
+
+
+  </div>
+  <!-- Footer -->
+  <div id="footer">
+  <div id="footer-social">
+    
+    
+    
+    
+    
+    
+</div>
+
+  <p id="footer-info">
+    &copy; 2020 郝李龙<br>
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> -
+    Theme <a href="https://github.com/Suolawangzai/hexo-theme-nebula" target="_blank">nebula</a>
+  </p>
+
+  <div id="busuanzi">
+    <span id="busuanzi_container_site_pv">
+      &hearts;
+    Total visits: <span id="busuanzi_value_site_pv"></span>
+    </span>
+  </div>
+  <!--
+  <div id="footer-info">
+    &copy; 2020 郝李龙<br>
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+  </div>
+-->
+</div>
+
+  <!-- After footer scripts -->
+  <!-- Disqus Comments -->
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+</body>
+
+</html>
